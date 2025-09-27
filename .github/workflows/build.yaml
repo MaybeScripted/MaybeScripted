@@ -3,12 +3,21 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - '.github/workflows/build.yaml'
   schedule:
     - cron: "0 4 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.actor != 'MaybeScripted/GitHub-Actions-Bot'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,11 +47,22 @@ jobs:
           USER_NAME: ${{ secrets.USER_NAME }}
         run: python today.py
 
-      - name: Commit
+      - name: Check for changes
+        id: changes
         run: |
           git add .
-          git diff
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected, skipping commit"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected, proceeding with commit"
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
           git config --global user.email "github-actions-bot@maybescripted.github.io"
           git config --global user.name "MaybeScripted/GitHub-Actions-Bot"
-          git commit -m "Updated README" -a || echo "No changes to commit"
+          git commit -m "Updated README"
           git push
