@@ -1,0 +1,29 @@
+name: Trigger README Update
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - master
+  pull_request:
+    types: [opened, synchronize, closed, merged]
+
+jobs:
+  trigger-readme-update:
+    runs-on: ubuntu-latest
+    if: github.actor == 'MaybeScripted'
+    steps:
+      - name: Trigger README update
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repository: MaybeScripted/MaybeScripted
+          event-type: update-readme
+          client-payload: |
+            {
+              "triggered_by": "${{ github.repository }}",
+              "commit_sha": "${{ github.sha }}",
+              "actor": "${{ github.actor }}",
+              "ref": "${{ github.ref }}",
+              "event_name": "${{ github.event_name }}"
+            }

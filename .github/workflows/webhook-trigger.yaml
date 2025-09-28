@@ -1,25 +1,18 @@
-name: README build
+name: Webhook README Update
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'README.md'
-      - '.github/workflows/build.yaml'
-  schedule:
-    - cron: "0 4 * * *"
   repository_dispatch:
-    types: [update-readme]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    types: [webhook-readme-update]
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: 'Repository that triggered this update'
+        required: false
+        default: 'manual'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: github.actor != 'MaybeScripted/GitHub-Actions-Bot'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -47,6 +40,7 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           USER_NAME: ${{ secrets.USER_NAME }}
+          SOURCE_REPO: ${{ github.event.client_payload.triggered_by || github.event.inputs.source_repo || 'unknown' }}
         run: python today.py
 
       - name: Check for changes
@@ -66,5 +60,5 @@ jobs:
         run: |
           git config --global user.email "github-actions-bot@maybescripted.github.io"
           git config --global user.name "MaybeScripted/GitHub-Actions-Bot"
-          git commit -m "Updated README"
+          git commit -m "Updated README (triggered by ${{ github.event.client_payload.triggered_by || github.event.inputs.source_repo || 'manual' }})"
           git push
