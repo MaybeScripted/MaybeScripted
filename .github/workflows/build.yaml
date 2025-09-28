@@ -10,6 +10,12 @@ on:
     - cron: "0 4 * * *"
   repository_dispatch:
     types: [update-readme]
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: 'Repository that triggered this update'
+        required: false
+        default: 'manual'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -47,7 +53,15 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           USER_NAME: ${{ secrets.USER_NAME }}
-        run: python today.py
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo || 'manual' }}
+          SOURCE_BRANCH: ${{ github.event.client_payload.source_branch || 'unknown' }}
+          SOURCE_COMMIT: ${{ github.event.client_payload.source_commit || 'unknown' }}
+        run: |
+          echo "Triggered by: ${{ github.event.client_payload.triggered_by || github.actor }}"
+          echo "Source repo: $SOURCE_REPO"
+          echo "Source branch: $SOURCE_BRANCH"
+          echo "Source commit: $SOURCE_COMMIT"
+          python today.py
 
       - name: Check for changes
         id: changes
