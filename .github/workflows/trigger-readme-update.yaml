@@ -11,7 +11,7 @@ on:
 jobs:
   trigger-readme-update:
     runs-on: ubuntu-latest
-    if: github.actor == 'MaybeScripted'
+    if: github.actor == 'MaybeScripted' && github.repository != 'MaybeScripted/MaybeScripted'
     steps:
       - name: Trigger README update
         uses: peter-evans/repository-dispatch@v3
