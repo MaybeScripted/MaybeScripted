@@ -1,134 +1,40 @@
-# Automatically update README statistics
-# This monitors ALL your repositories automatically using GitHub's Activity API
 name: README build
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: "*/3 * * * *"  # Check every 3 minutes for activity
-  workflow_dispatch:
-    inputs:
-      source_repo:
-        description: 'Repository that triggered this update'
-        required: false
-        default: 'manual'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+    - cron: "0 4 * * *"
 jobs:
-  check-and-update:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          token: ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Get Python 3.11
-        uses: actions/setup-python@v5
+      - name: Get Python 3.8
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.11'
-
+          python-version: '3.8'
       - name: Configure pip cache
-        uses: actions/cache@v4
+        uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/cache/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
+          restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: python -m pip install -r cache/requirements.txt
-
-      - name: Check for recent activity and update README
+      - name: Update README file
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           USER_NAME: ${{ secrets.USER_NAME }}
-        run: |
-          python -c "
-          import requests
-          import json
-          import os
-          import subprocess
-          from datetime import datetime, timedelta
-          
-          # Get the last run timestamp from a file
-          last_run_file = 'last_run.txt'
-          try:
-              with open(last_run_file, 'r') as f:
-                  last_run = f.read().strip()
-          except FileNotFoundError:
-              last_run = (datetime.now() - timedelta(minutes=5)).isoformat()
-          
-          # Convert to datetime for comparison
-          last_run_dt = datetime.fromisoformat(last_run)
-          
-          # Get user's recent activity
-          headers = {'Authorization': f'token {os.environ[\"ACCESS_TOKEN\"]}'}
-          url = f'https://api.github.com/users/{os.environ[\"USER_NAME\"]}/events'
-          
-          response = requests.get(url, headers=headers)
-          events = response.json()
-          
-          # Filter for push events in the last 3 minutes, excluding MaybeScripted/MaybeScripted
-          recent_activity = []
-          for event in events:
-              if event['type'] == 'PushEvent':
-                  repo_name = event['repo']['name']
-                  full_repo = f\"{event['actor']['login']}/{repo_name}\"
-                  
-                  # Skip MaybeScripted/MaybeScripted
-                  if full_repo == 'MaybeScripted/MaybeScripted':
-                      continue
-                      
-                  event_time = datetime.fromisoformat(event['created_at'].replace('Z', '+00:00'))
-                  
-                  # Only include events from the last 3 minutes
-                  if event_time > last_run_dt:
-                      recent_activity.append({
-                          'repo': full_repo,
-                          'branch': event['payload']['ref'].replace('refs/heads/', ''),
-                          'commits': len(event['payload']['commits']),
-                          'time': event['created_at']
-                      })
-          
-          # If there's recent activity, update README
-          if recent_activity:
-              print('Recent activity detected:')
-              for activity in recent_activity:
-                  print(f\"  - {activity['repo']} ({activity['commits']} commits)\")
-              
-              # Update README
-              print('Updating README...')
-              subprocess.run(['python', 'today.py'], check=True)
-              
-              # Write current timestamp for next run
-              with open(last_run_file, 'w') as f:
-                  f.write(datetime.now().isoformat())
-              
-              print('README updated successfully!')
-          else:
-              print('No recent activity detected - skipping update')
-          "
-
-      - name: Check for changes
-        id: changes
-        run: |
+        run: python today.py
+      - name: Commit
+        run: |-
           git add .
-          if git diff --staged --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No changes detected, skipping commit"
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected, proceeding with commit"
-          fi
-
-      - name: Commit and push
-        if: steps.changes.outputs.has_changes == 'true'
-        run: |
-          git config --global user.email "github-actions-bot@maybescripted.github.io"
+          git diff
+          git config --global user.email "github-actions-bot@MaybeScripted.github.io"
           git config --global user.name "MaybeScripted/GitHub-Actions-Bot"
-          git commit -m "Updated README - detected activity across repositories"
+          git commit -m "Updated README" -a || echo "No changes to commit"
           git push
