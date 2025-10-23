@@ -12,7 +12,7 @@
 
 </div>
 <div align="center">
-  <h3>📊 Profile Views</h3>
+  <h3>✨ Profile Views ✨</h3>
   <p align="center">
     <img src="https://count.getloli.com/@MaybeScripted?theme=booru-lisu&scale=1.2" alt="booru-lisu counter"/>
   </p>
