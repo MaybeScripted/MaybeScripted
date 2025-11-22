@@ -14,15 +14,15 @@
 <div align="center">
   <h3>✨ Profile Views ✨</h3>
   <p align="center">
-    <img src="https://count.getloli.com/@MaybeScripted?theme=booru-lisu&scale=1.2" alt="booru-lisu counter"/>
+    <img src="https://count.getloli.com/@Scripted-db?theme=booru-lisu&scale=1.2" alt="booru-lisu counter"/>
   </p>
 </div>
 
 <div align="center">
-  <a href="https://github.com/MaybeScripted/MaybeScripted">
+  <a href="https://github.com/Scripted-db/Scripted-db">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MaybeScripted/MaybeScripted/main/dark_mode.svg">
-      <img alt="MaybeScripted's GitHub Profile README" src="https://raw.githubusercontent.com/MaybeScripted/MaybeScripted/main/light_mode.svg">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Scripted-db/Scripted-db/main/dark_mode.svg">
+      <img alt="Scripted-db's GitHub Profile README" src="https://raw.githubusercontent.com/Scripted-db/Scripted-db/main/light_mode.svg">
     </picture>
   </a>
 </div>

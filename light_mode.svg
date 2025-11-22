@@ -17,7 +17,7 @@ text, tspan {white-space: pre;}
 </style>
 <rect width="700px" height="410px" fill="#ffffff" rx="15"/>
 <text x="20" y="30" fill="#24292f">
-<tspan x="20" y="30">maybescripted@github</tspan> -———————————————————————————————————————————-—-
+<tspan x="20" y="30">scripted-db@github</tspan> -———————————————————————————————————————————-—-
 <tspan x="20" y="50" class="cc">. </tspan><tspan class="key">OS</tspan>:<tspan class="cc"> ........................ </tspan><tspan class="value">Linux, Windows</tspan>
 <tspan x="20" y="70" class="cc">. </tspan><tspan class="key">Status</tspan>:<tspan class="cc"> .......................... </tspan><tspan class="value">💭 busy on private projects</tspan>
 <tspan x="20" y="90" class="cc">. </tspan><tspan class="key">IDE</tspan>:<tspan class="cc"> ........................ </tspan><tspan class="value">VSCode, Cursor, Neovim</tspan>
@@ -28,7 +28,7 @@ text, tspan {white-space: pre;}
 <tspan x="20" y="190" class="cc">. </tspan>
 <tspan x="20" y="210">- Contact</tspan> -——————————————————————————————————————————————-—-
 <tspan x="20" y="230" class="cc">. </tspan><tspan class="key">Website</tspan>:<tspan class="cc"> .......................... </tspan><tspan class="value">maybescripted.xyz</tspan>
-<tspan x="20" y="250" class="cc">. </tspan><tspan class="key">GitHub</tspan>:<tspan class="cc"> .................................. </tspan><tspan class="value">github.com/MaybeScripted</tspan>
+<tspan x="20" y="250" class="cc">. </tspan><tspan class="key">GitHub</tspan>:<tspan class="cc"> .................................. </tspan><tspan class="value">github.com/Scripted-db</tspan>
 <tspan x="20" y="270" class="cc">. </tspan><tspan class="key">Discord</tspan>:<tspan class="cc"> .................................. </tspan><tspan class="value">scripted.ts</tspan>
 <tspan x="20" y="290" class="cc">. </tspan>
 <tspan x="20" y="310">- GitHub Stats</tspan> -—————————————————————————————————————————-—-

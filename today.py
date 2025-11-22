@@ -7,7 +7,7 @@ import time
 import hashlib
 
 HEADERS = {'authorization': 'token '+ os.environ['ACCESS_TOKEN']}
-USER_NAME = os.environ['USER_NAME'] # 'MaybeScripted'
+USER_NAME = os.environ['USER_NAME'] # 'Scripted-db'
 QUERY_COUNT = {'user_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
 
 
@@ -217,7 +217,7 @@ def cache_builder(edges, comment_size, force_cache, loc_add=0, loc_del=0):
     If it has, run recursive_loc on that repository to update the LOC count
     """
     # Filter out excluded repositories
-    excluded_repos = ['maybescripted/maybescripted']
+    excluded_repos = ['scripted-db/scripted-db']
     edges = [edge for edge in edges if edge['node']['nameWithOwner'] not in excluded_repos]
     
     cached = True # Assume all repositories are cached
@@ -409,11 +409,11 @@ def formatter(query_type, difference, funct_return=False, whitespace=0):
 
 if __name__ == '__main__':
     """
-    MaybeScripted, 2024-2025
+    Scripted-db, 2024-2025
     """
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
-    # e.g {'id': 'MDQ6VXNlcjU3MzMxMTM0'} and 2025-11-03T21:15:07Z for username 'MaybeScripted'
+    # e.g {'id': 'MDQ6VXNlcjU3MzMxMTM0'} and 2025-11-03T21:15:07Z for username 'Scripted-db'
     user_data, user_time = perf_counter(user_getter, USER_NAME)
     OWNER_ID, acc_date = user_data
     formatter('account data', user_time)
@@ -426,7 +426,7 @@ if __name__ == '__main__':
 
     # several repositories that I've contributed to have since been deleted.
     # Update this ID with your actual GitHub user ID when you run the script
-    if OWNER_ID == {'id': 'YOUR_USER_ID_HERE'}: # only calculate for user MaybeScripted
+    if OWNER_ID == {'id': 'YOUR_USER_ID_HERE'}: # only calculate for user Scripted-db
         archived_data = add_archive()
         for index in range(len(total_loc)-1):
             total_loc[index] += archived_data[index]

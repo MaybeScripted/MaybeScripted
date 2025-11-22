@@ -37,7 +37,7 @@ jobs:
         run: |-
           git add .
           git diff
-          git config --global user.email "github-actions-bot@MaybeScripted.github.io"
-          git config --global user.name "MaybeScripted/GitHub-Actions-Bot"
+          git config --global user.email "github-actions-bot@Scripted-db.github.io"
+          git config --global user.name "Scripted-db/GitHub-Actions-Bot"
           git commit -m "Updated README" -a || echo "No changes to commit"
           git push
